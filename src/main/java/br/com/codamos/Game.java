@@ -61,11 +61,14 @@ public class Game extends Canvas implements Runnable {
                 continue;
             }
 
-            if (state.equals(State.Paused)) {
+            if (isPaused()) {
                 continue;
             }
 
-            tick(now);
+            if (!isGameOver()) {
+                tick(now);
+            }
+
             render();
             frames++;
 
@@ -91,17 +94,22 @@ public class Game extends Canvas implements Runnable {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.requestFocus();
 
-        state = State.Running;
 
         // Game assets
         File f = new File("./resources/tappyplane/Spritesheet/sheet.png");
         spritesheet = ImageIO.read(f);
 
+        reset();
+    }
+
+    public void reset() {
+        state = State.Running;
+
         // Game objects
         objects = new ArrayList<>();
         objects.add(new Sky(this));
         objects.add(new Floor(this));
-        objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
+        objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 4));
 
         rocks = new ArrayList<>();
         rocks.add(new Rock(this, (int) (this.getWidth() * 1.5f)));
@@ -163,28 +171,45 @@ public class Game extends Canvas implements Runnable {
         rocks.forEach(obj -> obj.render(g));
         score.render(g);
 
+        if (isGameOver()) {
+            BufferedImage gameOver = spritesheet.getSubimage(0, 835, 412, 78);
+            float scale = 0.75f;
+            int gameOverWidth = (int) (gameOver.getWidth() * scale);
+            int gameOverHeight = (int) (gameOver.getHeight() * scale);
+            int gameOverOffset = getWidth() - gameOverWidth;
+            g.drawImage(gameOver, gameOverOffset / 2, getHeight() / 2 - gameOverHeight / 2, gameOverWidth, gameOverHeight, null);
+        }
+
         g.dispose();
         bs.show();
     }
 
     public boolean isPaused() {
-        return state.compareTo(State.Paused) == 0;
+        return state.equals(State.Paused);
     }
 
     public void pause() {
-        if (state.compareTo(State.Running) == 0) {
+        if (state.equals(State.Running)) {
             state = State.Paused;
         }
     }
 
     public void resume() {
-        if (state.compareTo(State.Paused) == 0) {
+        if (state.equals(State.Paused)) {
             state = State.Running;
         }
     }
 
     public void stopGame() {
         state = State.Shutdown;
+    }
+
+    public void gameOver() {
+        state = State.GameOver;
+    }
+
+    public boolean isGameOver() {
+        return state.equals(State.GameOver);
     }
 
     public void teardown() {
@@ -204,6 +229,7 @@ public class Game extends Canvas implements Runnable {
         Menu,
         Running,
         Paused,
+        GameOver,
         Shutdown,
     }
 }

@@ -13,6 +13,7 @@ Tappy plane
 - [x] Scoring system
 - [x] Increase scroll speed relative to score
 - [x] Pause/resume
+- [x] Game over/restart
 
 ## Menu
 

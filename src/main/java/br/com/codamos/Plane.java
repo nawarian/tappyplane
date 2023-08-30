@@ -15,9 +15,6 @@ public class Plane extends GameObject {
     private double gravity = 0.3f;
     private double velY = 0.0f;
 
-    private Color color = Color.RED;
-    private long blinkUntil = 0;
-
     public Plane(Game game, int x, int y) {
         super(game, x, y, 0, 0);
 
@@ -55,19 +52,13 @@ public class Plane extends GameObject {
 
         // Check collision
         if (game.rocks.stream().filter(rock -> this.collidesWith(rock)).count() > 0) {
-            color = Color.CYAN;
-            blinkUntil = time + 500; // 500ms
+            game.gameOver();
         }
 
         // Check collision with floor (fall)
         Floor f = (Floor) game.objects.stream().filter(obj -> obj instanceof Floor).findFirst().orElseThrow();
         if (this.body.y + this.body.height >= f.body.y) {
-            color = Color.BLUE;
-            blinkUntil = time + 500; // 500ms
-        }
-
-        if (blinkUntil < time) {
-            color = Color.RED;
+            game.gameOver();
         }
 
         if (currentFrame > planes.length - 1) {
@@ -87,7 +78,7 @@ public class Plane extends GameObject {
         g.drawImage(planes[currentFrame], body.x, body.y, body.width, body.height, null);
 
         if (game.debug) {
-            g.setColor(color);
+            g.setColor(Color.RED);
             g.drawRect(body.x, body.y, body.width, body.height);
         }
     }

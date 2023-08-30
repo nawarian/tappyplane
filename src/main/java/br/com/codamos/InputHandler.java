@@ -28,6 +28,10 @@ public class InputHandler implements KeyListener, MouseListener {
             if (!game.isPaused()) {
                 plane.tap();
             }
+
+            if (game.isGameOver()) {
+                game.reset();
+            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
