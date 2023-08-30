@@ -13,10 +13,10 @@ import java.util.Random;
 public class Game extends Canvas implements Runnable {
     private JFrame window;
     private Random random;
-    public boolean running = false;
     private int currentFPS = 0;
 
     // Game modifiers
+    public State state = State.Running;
     public int scrollSpeed = 1;
 
     // Game objects
@@ -45,9 +45,13 @@ public class Game extends Canvas implements Runnable {
         long timePerFrame = 1000 / 120; // 1s / 120fps
         long lastFpsCheck = 0;
         int frames = 0;
-        while (running) {
+        while (!state.equals(State.Shutdown)) {
             now = System.currentTimeMillis();
             if (now - lastFrame < timePerFrame) {
+                continue;
+            }
+
+            if (state.equals(State.Paused)) {
                 continue;
             }
 
@@ -75,7 +79,7 @@ public class Game extends Canvas implements Runnable {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.requestFocus();
 
-        running = true;
+        state = State.Running;
 
         // Game objects
         objects = new ArrayList<>();
@@ -147,6 +151,26 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
+    public boolean isPaused() {
+        return state.compareTo(State.Paused) == 0;
+    }
+
+    public void pause() {
+        if (state.compareTo(State.Running) == 0) {
+            state = State.Paused;
+        }
+    }
+
+    public void resume() {
+        if (state.compareTo(State.Paused) == 0) {
+            state = State.Running;
+        }
+    }
+
+    public void stopGame() {
+        state = State.Shutdown;
+    }
+
     public void teardown() {
         objects.forEach(GameObject::destroy);
         rocks.forEach(GameObject::destroy);
@@ -155,8 +179,15 @@ public class Game extends Canvas implements Runnable {
         window.dispose();
     }
 
-    public static void main(String[] argss) {
+    public static void main(String[] args) {
         Game game = new Game();
         game.run();
+    }
+
+    public enum State {
+        Menu,
+        Running,
+        Paused,
+        Shutdown,
     }
 }

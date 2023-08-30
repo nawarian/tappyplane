@@ -21,11 +21,25 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            plane.tap();
+            if (game.isPaused()) {
+                game.resume();
+            }
+
+            if (!game.isPaused()) {
+                plane.tap();
+            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            game.running = false;
+            game.stopGame();
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            if (!game.isPaused()) {
+                game.pause();
+            } else {
+                game.resume();
+            }
         }
     }
 

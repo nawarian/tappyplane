@@ -12,7 +12,7 @@ Tappy plane
 - [x] Increase scroll speed over time
 - [x] Scoring system
 - [x] Increase scroll speed relative to score
-- [ ] Pause/resume
+- [x] Pause/resume
 
 ## Menu
 
