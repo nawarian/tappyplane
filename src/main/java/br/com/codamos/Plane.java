@@ -6,7 +6,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Plane extends GameObject {
-    private BufferedImage plane;
+    private BufferedImage[] planes;
+    private int currentFrame = 0;
+    private long lastFrame = 0;
     private int initialX;
     private int initialY;
 
@@ -28,7 +30,11 @@ public class Plane extends GameObject {
         int width = 88;
         int height = 73;
 
-        plane = game.spritesheet.getSubimage(216, 1878, 88, 73);
+        planes = new BufferedImage[] {
+                game.spritesheet.getSubimage(216, 1878, 88, 73),
+                game.spritesheet.getSubimage(372, 1059, 88, 73),
+                game.spritesheet.getSubimage(372, 986, 88, 73),
+        };
 
         body = new Rectangle(initialX - width / 2, initialY - height / 2, width, height);
         game.addKeyListener(new InputHandler(game, this));
@@ -36,6 +42,12 @@ public class Plane extends GameObject {
 
     @Override
     public void tick(long time) {
+        float animationSpeed = 50f / game.scrollSpeed;
+        if (time - lastFrame >= animationSpeed) {
+            currentFrame++;
+            lastFrame = time;
+        }
+
         velY += gravity;
 
         body.y = (int) Math.min(body.y + velY, game.getHeight() - body.height);
@@ -57,6 +69,10 @@ public class Plane extends GameObject {
         if (blinkUntil < time) {
             color = Color.RED;
         }
+
+        if (currentFrame > planes.length - 1) {
+            currentFrame = 0;
+        }
     }
 
     private boolean collidesWith(Rock rock) {
@@ -68,7 +84,7 @@ public class Plane extends GameObject {
     }
 
     public void render(Graphics g) {
-        g.drawImage(plane, body.x, body.y, body.width, body.height, null);
+        g.drawImage(planes[currentFrame], body.x, body.y, body.width, body.height, null);
 
         if (game.debug) {
             g.setColor(color);
