@@ -7,9 +7,11 @@ import java.awt.event.MouseListener;
 
 public class InputHandler implements KeyListener, MouseListener {
     private Game game;
+    private Plane plane;
 
-    public InputHandler(Game game) {
+    public InputHandler(Game game, Plane plane) {
         this.game = game;
+        this.plane = plane;
     }
 
     @Override
@@ -19,7 +21,7 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            game.plane.tap();
+            plane.tap();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

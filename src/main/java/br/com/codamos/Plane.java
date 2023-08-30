@@ -2,16 +2,16 @@ package br.com.codamos;
 
 import java.awt.*;
 
-public class Plane {
-    private Game game;
+public class Plane extends GameObject {
     private int initialX;
     private int initialY;
-    private Rectangle body;
 
     private double gravity = 0.3f;
     private double velY = 0.0f;
 
     public Plane(Game game, int x, int y) {
+        super(game, x, y, 0, 0);
+
         this.game = game;
         initialX = x;
         initialY = y;
@@ -22,9 +22,11 @@ public class Plane {
         int height = 73;
 
         body = new Rectangle(initialX - width / 2, initialY - height / 2, width, height);
+        game.addKeyListener(new InputHandler(game, this));
     }
 
-    public void tick() {
+    @Override
+    public void tick(long time) {
         velY += gravity;
 
         body.y = (int) Math.min(body.y + velY, game.getHeight() - body.height);
@@ -40,6 +42,7 @@ public class Plane {
         g.fillRect(body.x, body.y, body.width, body.height);
     }
 
-    public void teardown() {
+    @Override
+    public void destroy() {
     }
 }

@@ -3,6 +3,8 @@ package br.com.codamos;
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends Canvas implements Runnable {
     private JFrame window;
@@ -10,7 +12,7 @@ public class Game extends Canvas implements Runnable {
     private int currentFPS = 0;
 
     // Game objects
-    public Plane plane;
+    public List<GameObject> objects;
 
     public Game() {
         Dimension d = new Dimension(800, 600);
@@ -36,7 +38,7 @@ public class Game extends Canvas implements Runnable {
                 continue;
             }
 
-            tick();
+            tick(now);
             render();
             frames++;
 
@@ -65,14 +67,15 @@ public class Game extends Canvas implements Runnable {
         running = true;
 
         // Game objects
-        plane = new Plane(this, window.getWidth() / 4, window.getHeight() / 2);
-        plane.init();
+        objects = new ArrayList<>();
+        objects.add(new Floor(this, window.getWidth(), window.getHeight()));
+        objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
 
-        this.addKeyListener(new InputHandler(this));
+        objects.forEach(GameObject::init);
     }
 
-    public void tick() {
-        plane.tick();
+    public void tick(long time) {
+        objects.forEach(obj -> obj.tick(time));
     }
 
     public void render() {
@@ -85,18 +88,18 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
 
         // Clear screen
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         // render game objects
-        plane.render(g);
+        objects.forEach(obj -> obj.render(g));
 
         g.dispose();
         bs.show();
     }
 
     public void teardown() {
-        plane.teardown();
+        objects.forEach(GameObject::destroy);
 
         window.dispose();
     }
