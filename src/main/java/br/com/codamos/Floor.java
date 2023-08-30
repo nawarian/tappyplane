@@ -27,8 +27,9 @@ public class Floor extends GameObject {
             offset2 = offset + body.width;
         }
 
-        offset -= game.scrollSpeed;
-        offset2 -= game.scrollSpeed;
+        GameScene scene = (GameScene) game.scene;
+        offset -= scene.scrollSpeed;
+        offset2 -= scene.scrollSpeed;
     }
 
     @Override

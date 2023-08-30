@@ -5,11 +5,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class InputHandler implements KeyListener, MouseListener {
+public class InGameInputHandler implements KeyListener, MouseListener {
     private Game game;
     private Plane plane;
 
-    public InputHandler(Game game, Plane plane) {
+    public InGameInputHandler(Game game, Plane plane) {
         this.game = game;
         this.plane = plane;
     }

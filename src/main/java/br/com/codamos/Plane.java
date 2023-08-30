@@ -25,18 +25,19 @@ public class Plane extends GameObject {
                 game.spritesheet.getSubimage(372, 986, 88, 73),
         };
 
-        game.addKeyListener(new InputHandler(game, this));
+        game.addKeyListener(new InGameInputHandler(game, this));
     }
 
     @Override
     public void tick(long time) {
-        float animationSpeed = 50f / game.scrollSpeed;
+        GameScene scene = (GameScene) game.scene;
+        float animationSpeed = 50f / scene.scrollSpeed;
         if (time - lastFrame >= animationSpeed) {
             currentFrame++;
             lastFrame = time;
         }
 
-        if (game.scrollSpeed > 3) {
+        if (scene.scrollSpeed > 3) {
             gravity = 0.4f;
         }
 
@@ -46,12 +47,12 @@ public class Plane extends GameObject {
         body.y = Math.max(body.y, 0);
 
         // Check collision
-        if (game.rocks.stream().filter(rock -> this.collidesWith(rock)).count() > 0) {
+        if (scene.rocks.stream().filter(rock -> this.collidesWith(rock)).count() > 0) {
             game.gameOver();
         }
 
         // Check collision with floor (fall)
-        Floor f = (Floor) game.objects.stream().filter(obj -> obj instanceof Floor).findFirst().orElseThrow();
+        Floor f = scene.floor;
         if (this.body.y + this.body.height >= f.body.y) {
             game.gameOver();
         }

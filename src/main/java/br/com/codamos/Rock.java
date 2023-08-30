@@ -29,7 +29,8 @@ public class Rock extends GameObject {
 
     @Override
     public void tick(long time) {
-        body.x -= game.scrollSpeed;
+        GameScene scene = (GameScene) game.scene;
+        body.x -= scene.scrollSpeed;
     }
 
     @Override
