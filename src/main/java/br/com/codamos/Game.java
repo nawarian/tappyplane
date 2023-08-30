@@ -71,12 +71,20 @@ public class Game extends Canvas implements Runnable {
         objects.add(new Floor(this, window.getWidth(), window.getHeight()));
         objects.add(new Sky(this));
         objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
+        objects.add(new Pipe(this, 660, 0, 88, window.getHeight() / 4));
+        objects.add(new Pipe(this, 1024, window.getHeight() / 4, 88, window.getHeight()));
 
         objects.forEach(GameObject::init);
     }
 
     public void tick(long time) {
         objects.forEach(obj -> obj.tick(time));
+
+        // Reset pipes
+        objects
+                .stream()
+                .filter(obj -> obj instanceof Pipe && obj.body.x + obj.body.width < 0)
+                .forEachOrdered(obj -> obj.body.x += getWidth() + obj.body.width);
     }
 
     public void render() {
