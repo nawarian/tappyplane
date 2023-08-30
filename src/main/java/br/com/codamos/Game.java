@@ -1,7 +1,7 @@
 package br.com.codamos;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -84,6 +84,7 @@ public class Game extends Canvas implements Runnable {
     public void init() throws IOException {
         // Window
         window = new JFrame("Tappy Plane");
+        window.setUndecorated(true);
         window.setVisible(true);
         window.add(this);
         window.pack();
