@@ -7,7 +7,7 @@ Tappy plane
 - [x] Sky class with side scrolling
 - [x] Pipe class with side scrolling
 - [x] Randomly place pipes
-- [ ] Collision between Plane and Pipe
+- [x] Collision between Plane and Pipe
 - [ ] Collision between Plane and bottom world edge (fall)
 - [ ] Increase scroll speed over time
 - [ ] Scoring system
