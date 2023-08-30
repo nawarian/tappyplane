@@ -107,9 +107,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void reset() {
-        state = State.Running;
         scene = new GameScene(this);
         scene.init();
+        state = State.Running;
     }
 
     public void tick(long time) {
