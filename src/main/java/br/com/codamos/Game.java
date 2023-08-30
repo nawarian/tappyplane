@@ -5,22 +5,28 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
     private JFrame window;
+    private Random random;
     public boolean running = false;
     private int currentFPS = 0;
 
     // Game objects
     public List<GameObject> objects;
+    public List<Rock> rocks;
 
     public Game() {
-        Dimension d = new Dimension(800, 600);
+        Dimension d = new Dimension(320, 600);
         this.setSize(d);
         this.setPreferredSize(d);
         this.setMaximumSize(d);
         this.setMinimumSize(d);
         this.setVisible(true);
+        this.requestFocus();
+
+        random = new Random();
     }
 
     @Override
@@ -60,8 +66,6 @@ public class Game extends Canvas implements Runnable {
         window.add(this);
         window.pack();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLocationRelativeTo(null);
-
         this.requestFocus();
 
         running = true;
@@ -71,20 +75,28 @@ public class Game extends Canvas implements Runnable {
         objects.add(new Floor(this, window.getWidth(), window.getHeight()));
         objects.add(new Sky(this));
         objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
-        objects.add(new Pipe(this, 660, 0, 88, window.getHeight() / 4));
-        objects.add(new Pipe(this, 1024, window.getHeight() / 4, 88, window.getHeight()));
+
+        rocks = new ArrayList<>();
+        rocks.add(new Rock(this, (int) (this.getWidth() * 1.5f)));
 
         objects.forEach(GameObject::init);
     }
 
     public void tick(long time) {
         objects.forEach(obj -> obj.tick(time));
+        rocks.forEach(obj -> obj.tick(time));
 
-        // Reset pipes
-        objects
-                .stream()
-                .filter(obj -> obj instanceof Pipe && obj.body.x + obj.body.width < 0)
-                .forEachOrdered(obj -> obj.body.x += getWidth() + obj.body.width);
+        // Cleanup pipes
+        rocks.removeAll(
+                rocks.stream().filter(obj -> obj instanceof Rock && obj.body.x + obj.body.width < 0).toList()
+        );
+
+        // Build new pipes
+        if (rocks.size() < 2) {
+            Rock lastRock = rocks.get(rocks.size() - 1);
+            float distance = random.nextFloat(1.7f, 2.5f);
+            rocks.add(new Rock(this, (int) (lastRock.body.x + lastRock.body.width * distance)));
+        }
     }
 
     public void render() {
@@ -102,6 +114,7 @@ public class Game extends Canvas implements Runnable {
 
         // render game objects
         objects.forEach(obj -> obj.render(g));
+        rocks.forEach(obj -> obj.render(g));
 
         g.dispose();
         bs.show();
@@ -109,6 +122,7 @@ public class Game extends Canvas implements Runnable {
 
     public void teardown() {
         objects.forEach(GameObject::destroy);
+        rocks.forEach(GameObject::destroy);
 
         window.dispose();
     }
