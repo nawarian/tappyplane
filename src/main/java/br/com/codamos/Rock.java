@@ -1,6 +1,7 @@
 package br.com.codamos;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Random;
 
 public class Rock extends GameObject {
@@ -26,7 +27,7 @@ public class Rock extends GameObject {
 
     @Override
     public void tick(long time) {
-        body.x--;
+        body.x -= game.scrollSpeed;
     }
 
     @Override

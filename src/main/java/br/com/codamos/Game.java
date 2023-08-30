@@ -1,7 +1,10 @@
 package br.com.codamos;
 
 import javax.swing.JFrame;
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,9 @@ public class Game extends Canvas implements Runnable {
     private Random random;
     public boolean running = false;
     private int currentFPS = 0;
+
+    // Game modifiers
+    public int scrollSpeed = 1;
 
     // Game objects
     public List<GameObject> objects;
@@ -96,6 +102,11 @@ public class Game extends Canvas implements Runnable {
             Rock lastRock = rocks.get(rocks.size() - 1);
             float distance = random.nextFloat(1.7f, 2.5f);
             rocks.add(new Rock(this, (int) (lastRock.body.x + lastRock.body.width * distance)));
+            this.scrollSpeed++;
+        }
+
+        if (scrollSpeed > 5) {
+            scrollSpeed = 5;
         }
     }
 

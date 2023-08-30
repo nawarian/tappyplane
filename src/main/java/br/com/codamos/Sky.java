@@ -56,7 +56,7 @@ public class Sky extends GameObject {
 
         @Override
         public void tick(long time) {
-            this.body.x--;
+            this.body.x -= game.scrollSpeed;
         }
 
         @Override

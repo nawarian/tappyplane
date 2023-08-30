@@ -64,7 +64,7 @@ public class Floor extends GameObject {
 
         @Override
         public void tick(long time) {
-            body.x--;
+            body.x -= game.scrollSpeed;
 
             if ((body.x + body.width) < 0) {
                 body.x = game.getWidth();
