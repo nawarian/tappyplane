@@ -35,6 +35,7 @@ public class InputHandler implements KeyListener, MouseListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            game.reset();
             game.stopGame();
         }
 
