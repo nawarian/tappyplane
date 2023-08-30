@@ -2,38 +2,29 @@ package br.com.codamos;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Plane extends GameObject {
     private BufferedImage[] planes;
     private int currentFrame = 0;
     private long lastFrame = 0;
-    private int initialX;
-    private int initialY;
 
-    private double gravity = 0.3f;
+    private double gravity = 0.2f;
     private double velY = 0.0f;
 
     public Plane(Game game, int x, int y) {
-        super(game, x, y, 0, 0);
+        super(game, x, y, 72, 55);
 
         this.game = game;
-        initialX = x;
-        initialY = y;
     }
 
     public void init() {
-        int width = 88;
-        int height = 73;
-
-        planes = new BufferedImage[] {
+        planes = new BufferedImage[]{
                 game.spritesheet.getSubimage(216, 1878, 88, 73),
                 game.spritesheet.getSubimage(372, 1059, 88, 73),
                 game.spritesheet.getSubimage(372, 986, 88, 73),
         };
 
-        body = new Rectangle(initialX - width / 2, initialY - height / 2, width, height);
         game.addKeyListener(new InputHandler(game, this));
     }
 
@@ -43,6 +34,10 @@ public class Plane extends GameObject {
         if (time - lastFrame >= animationSpeed) {
             currentFrame++;
             lastFrame = time;
+        }
+
+        if (game.scrollSpeed > 3) {
+            gravity = 0.4f;
         }
 
         velY += gravity;
@@ -71,11 +66,12 @@ public class Plane extends GameObject {
     }
 
     public void tap() {
-        velY = -10;
+        velY = -5;
     }
 
     public void render(Graphics g) {
-        g.drawImage(planes[currentFrame], body.x, body.y, body.width, body.height, null);
+        BufferedImage frame = planes[currentFrame];
+        g.drawImage(frame, body.x - 5, body.y - 5, frame.getWidth(), frame.getHeight(), null);
 
         if (game.debug) {
             g.setColor(Color.RED);

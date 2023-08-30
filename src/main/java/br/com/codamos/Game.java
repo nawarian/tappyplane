@@ -93,7 +93,7 @@ public class Game extends Canvas implements Runnable {
         window.pack();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.requestFocus();
-
+        window.setLocationRelativeTo(null);
 
         // Game assets
         File f = new File("./resources/tappyplane/Spritesheet/sheet.png");
