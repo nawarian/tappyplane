@@ -22,6 +22,7 @@ public class Game extends Canvas implements Runnable {
     // Game objects
     public List<GameObject> objects;
     public List<Rock> rocks;
+    public Score score;
 
     public Game() {
         Dimension d = new Dimension(320, 600);
@@ -85,17 +86,21 @@ public class Game extends Canvas implements Runnable {
         rocks = new ArrayList<>();
         rocks.add(new Rock(this, (int) (this.getWidth() * 1.5f)));
 
+        score = new Score(this, 0, 0, getWidth(), getHeight());
+        score.init();
+
         objects.forEach(GameObject::init);
     }
 
     public void tick(long time) {
         objects.forEach(obj -> obj.tick(time));
         rocks.forEach(obj -> obj.tick(time));
+        score.tick(time);
 
-        // Cleanup pipes
-        rocks.removeAll(
-                rocks.stream().filter(obj -> obj instanceof Rock && obj.body.x + obj.body.width < 0).toList()
-        );
+        // Cleanup rocks
+        List<Rock> rocksToBeRemoved = rocks.stream().filter(obj -> obj instanceof Rock && obj.body.x + obj.body.width < 0).toList();
+        rocks.removeAll(rocksToBeRemoved);
+        score.total += rocksToBeRemoved.size();
 
         // Build new pipes
         if (rocks.size() < 2) {
@@ -126,6 +131,7 @@ public class Game extends Canvas implements Runnable {
         // render game objects
         objects.forEach(obj -> obj.render(g));
         rocks.forEach(obj -> obj.render(g));
+        score.render(g);
 
         g.dispose();
         bs.show();
@@ -134,6 +140,7 @@ public class Game extends Canvas implements Runnable {
     public void teardown() {
         objects.forEach(GameObject::destroy);
         rocks.forEach(GameObject::destroy);
+        score.destroy();
 
         window.dispose();
     }

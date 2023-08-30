@@ -10,7 +10,7 @@ Tappy plane
 - [x] Collision between Plane and Pipe
 - [x] Collision between Plane and bottom world edge (fall)
 - [x] Increase scroll speed over time
-- [ ] Scoring system
+- [x] Scoring system
 - [ ] Increase scroll speed relative to score
 - [ ] Pause/resume
 
