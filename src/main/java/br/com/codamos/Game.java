@@ -69,6 +69,7 @@ public class Game extends Canvas implements Runnable {
         // Game objects
         objects = new ArrayList<>();
         objects.add(new Floor(this, window.getWidth(), window.getHeight()));
+        objects.add(new Sky(this));
         objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
 
         objects.forEach(GameObject::init);
