@@ -11,7 +11,7 @@ Tappy plane
 - [x] Collision between Plane and bottom world edge (fall)
 - [x] Increase scroll speed over time
 - [x] Scoring system
-- [ ] Increase scroll speed relative to score
+- [x] Increase scroll speed relative to score
 - [ ] Pause/resume
 
 ## Menu

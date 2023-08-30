@@ -107,11 +107,21 @@ public class Game extends Canvas implements Runnable {
             Rock lastRock = rocks.get(rocks.size() - 1);
             float distance = random.nextFloat(1.7f, 2.5f);
             rocks.add(new Rock(this, (int) (lastRock.body.x + lastRock.body.width * distance)));
-            this.scrollSpeed++;
         }
 
-        if (scrollSpeed > 5) {
+        // Increase difficulty
+        if (score.total > 0 && score.total <= 15) {
+            scrollSpeed = 1;
+        } else if (score.total > 15 && score.total <= 35) {
+            scrollSpeed = 2;
+        } else if (score.total > 35 && score.total <= 70) {
+            scrollSpeed = 3;
+        } else if (score.total > 70 && score.total <= 90) {
+            scrollSpeed = 4;
+        } else if (score.total > 90) {
             scrollSpeed = 5;
+        } else {
+            scrollSpeed = 1;
         }
     }
 
