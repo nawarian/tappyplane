@@ -22,7 +22,7 @@ Tappy plane
 
 ## Finish
 
-- [ ] Graphics
+- [x] Graphics
 - [ ] Polish gameplay
 - [ ] Package project into binary (win, linux and mac)
 - [ ] Publish to itch.io

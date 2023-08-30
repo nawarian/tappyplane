@@ -1,8 +1,12 @@
 package br.com.codamos;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Plane extends GameObject {
+    private BufferedImage plane;
     private int initialX;
     private int initialY;
 
@@ -23,6 +27,8 @@ public class Plane extends GameObject {
     public void init() {
         int width = 88;
         int height = 73;
+
+        plane = game.spritesheet.getSubimage(216, 1878, 88, 73);
 
         body = new Rectangle(initialX - width / 2, initialY - height / 2, width, height);
         game.addKeyListener(new InputHandler(game, this));
@@ -62,8 +68,12 @@ public class Plane extends GameObject {
     }
 
     public void render(Graphics g) {
-        g.setColor(color);
-        g.fillRect(body.x, body.y, body.width, body.height);
+        g.drawImage(plane, body.x, body.y, body.width, body.height, null);
+
+        if (game.debug) {
+            g.setColor(color);
+            g.drawRect(body.x, body.y, body.width, body.height);
+        }
     }
 
     @Override

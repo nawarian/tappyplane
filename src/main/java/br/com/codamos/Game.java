@@ -1,11 +1,15 @@
 package br.com.codamos;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,10 +18,12 @@ public class Game extends Canvas implements Runnable {
     private JFrame window;
     private Random random;
     private int currentFPS = 0;
+    public BufferedImage spritesheet;
 
     // Game modifiers
     public State state = State.Running;
     public int scrollSpeed = 1;
+    public boolean debug = true;
 
     // Game objects
     public List<GameObject> objects;
@@ -38,7 +44,11 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        init();
+        try {
+            init();
+        } catch (IOException e) {
+            System.out.println("Could not load game assets: " + e.getMessage());
+        }
 
         long now = System.currentTimeMillis();
         long lastFrame = 0;
@@ -71,7 +81,8 @@ public class Game extends Canvas implements Runnable {
         teardown();
     }
 
-    public void init() {
+    public void init() throws IOException {
+        // Window
         window = new JFrame("Tappy Plane");
         window.setVisible(true);
         window.add(this);
@@ -81,10 +92,14 @@ public class Game extends Canvas implements Runnable {
 
         state = State.Running;
 
+        // Game assets
+        File f = new File("./resources/tappyplane/Spritesheet/sheet.png");
+        spritesheet = ImageIO.read(f);
+
         // Game objects
         objects = new ArrayList<>();
-        objects.add(new Floor(this, window.getWidth(), window.getHeight()));
         objects.add(new Sky(this));
+        objects.add(new Floor(this));
         objects.add(new Plane(this, window.getWidth() / 4, window.getHeight() / 2));
 
         rocks = new ArrayList<>();
@@ -102,14 +117,14 @@ public class Game extends Canvas implements Runnable {
         score.tick(time);
 
         // Cleanup rocks
-        List<Rock> rocksToBeRemoved = rocks.stream().filter(obj -> obj instanceof Rock && obj.body.x + obj.body.width < 0).toList();
+        List<Rock> rocksToBeRemoved = rocks.stream().filter(obj -> obj instanceof Rock && obj.body.x + 110 < 0).toList();
         rocks.removeAll(rocksToBeRemoved);
         score.total += rocksToBeRemoved.size();
 
-        // Build new pipes
+        // Build new rocks
         if (rocks.size() < 2) {
             Rock lastRock = rocks.get(rocks.size() - 1);
-            float distance = random.nextFloat(1.7f, 2.5f);
+            float distance = random.nextFloat(4.5f, 5.5f);
             rocks.add(new Rock(this, (int) (lastRock.body.x + lastRock.body.width * distance)));
         }
 
