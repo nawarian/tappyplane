@@ -41,6 +41,13 @@ public class Plane extends GameObject {
             blinkUntil = time + 500; // 500ms
         }
 
+        // Check collision with floor (fall)
+        Floor f = (Floor) game.objects.stream().filter(obj -> obj instanceof Floor).findFirst().orElseThrow();
+        if (this.body.y + this.body.height >= f.body.y) {
+            color = Color.BLUE;
+            blinkUntil = time + 500; // 500ms
+        }
+
         if (blinkUntil < time) {
             color = Color.RED;
         }
