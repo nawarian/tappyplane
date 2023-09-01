@@ -44,6 +44,10 @@ public class GameScene extends AbstractScene {
 
     @Override
     public void tick(long time) {
+        if (rocks == null) {
+            return;
+        }
+
         sky.tick(time);
         floor.tick(time);
         rocks.forEach(obj -> obj.tick(time));

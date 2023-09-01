@@ -16,8 +16,12 @@ public class MenuInputHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             game.start();
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+//            game.about();
         }
     }
 

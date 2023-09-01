@@ -17,9 +17,7 @@ Tappy plane
 
 ## Menu
 
-- [ ] Main menu: Start and About options
-- [ ] About screen: author, license, credits
-- [ ] Pause menu: resume and quit options
+- [x] Main menu: Start
 
 ## Finish
 
